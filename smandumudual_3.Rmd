@@ -1,0 +1,54 @@
+---
+title: "Dual Solution"
+author: "smandumu"
+date: "9/23/2019"
+output: html_document
+---
+```{r}
+library(lpSolveAPI)
+lprec<-make.lp(0,11)
+lp.control(lprec,sense='min')
+set.objfn(lprec,c(750,900,450,13000,12000,5000,900,1200,750,0,0))
+add.constraint(lprec,c(1,20,1,900,450),">=",420,indices = c(1,4,9,10,11))
+add.constraint(lprec,c(1,15,1,900,450),">=",360,indices = c(1,4,8,10,11))
+add.constraint(lprec,c(1,12,1,900,450),">=",300,indices = c(1,4,7,10,11))
+add.constraint(lprec,c(1,20,1,-750),">=",420,indices = c(2,5,9,10))
+add.constraint(lprec,c(1,15,1,-750),">=",360,indices = c(2,5,8,10))
+add.constraint(lprec,c(1,12,1,-750),">=",300,indices = c(2,5,7,10))
+add.constraint(lprec,c(1,20,1,-750),">=",420,indices = c(3,6,9,11))
+add.constraint(lprec,c(1,15,1,-750),">=",360,indices = c(3,6,8,11))
+add.constraint(lprec,c(1,12,1,-750),">=",300,indices = c(3,6,7,11))
+set.bounds(lprec,lower = c(-Inf,-Inf),columns = 10:11)
+solve(lprec)
+get.objective(lprec)
+get.constraints(lprec)
+get.variables(lprec)
+get.sensitivity.obj(lprec)
+get.sensitivity.rhs(lprec)
+```
+
+
+```
+
+#<!-- ```{r setup, include=FALSE} -->
+#<!-- knitr::opts_chunk$set(echo = TRUE) -->
+<!-- ``` -->
+
+#<!-- ## R Markdown -->
+
+#<!-- This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>. -->
+
+#<!-- When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this: -->
+
+##<!-- summary(cars) -->
+#<!-- ``` -->
+
+#<!-- ## Including Plots -->
+
+#<!-- You can also embed plots, for example: -->
+
+#<!-- ```{r pressure, echo=FALSE} -->
+#<!-- plot(pressure) -->
+#<!-- ``` -->
+
+#<!-- Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot. -->
