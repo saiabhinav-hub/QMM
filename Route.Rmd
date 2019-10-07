@@ -1,0 +1,56 @@
+---
+title: "Route"
+author: "smandumu"
+date: "10/7/2019"
+output: html_document
+---
+```{r}
+library(lpSolveAPI) # calling library 
+
+lprec <- read.lp("smandumu_5.lp") # assigning variable to the linear program file.
+
+lprec
+
+solve(lprec)
+
+get.objective(lprec)
+
+path <- get.variables(lprec)
+
+path
+
+#A12 = X1 ; A13 = X2 ; A24 = X3 ; A25 = X4 ; A35 = X5  ; A46 = X6
+#A47 = X7 ; A57 = X8 ; A58 = X9 ; A69 = X10 ; A79 = X11 ; A89 = X12
+
+nodenames <- c("X2" , "X1" , "X5"  , "X4" , "X9" , "X8" , "X3" , "X7" , "X6" , "X12" , "X11" , "X10")
+Nodes <-     c("A13","A12",  "A35",  "A25", "A58", "A57"  ,"A24","A47", "A46","A89","A79","A89" )
+#get.constraints(lprec)
+a1 <- cbind(nodenames,path)
+
+cbind(a1,Nodes)
+
+```
+
+<!-- ```{r setup, include=FALSE} -->
+<!-- knitr::opts_chunk$set(echo = TRUE) -->
+<!-- ``` -->
+
+<!-- ## R Markdown -->
+
+<!-- This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>. -->
+
+<!-- When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this: -->
+
+<!-- ```{r cars} -->
+<!-- summary(cars) -->
+<!-- ``` -->
+
+<!-- ## Including Plots -->
+
+<!-- You can also embed plots, for example: -->
+
+<!-- ```{r pressure, echo=FALSE} -->
+<!-- plot(pressure) -->
+<!-- ``` -->
+
+<!-- Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot. -->
