@@ -1,0 +1,141 @@
+---
+title: "Assignment-6"
+author: "smandumu"
+date: "27/10/2019"
+output: html_document
+---
+```{r}
+library(lpSolveAPI)
+dmu1 <- read.lp("dmu1.lp")
+dmu1
+solve(dmu1)
+get.objective(dmu1)
+get.variables(dmu1)
+#get.variables(dmu1)[4]
+```
+
+The solution indicates that the objective value is 1, which indicates that we are able to achieve maximum efficiency for DMU(1).This happens when we use the weights 5.172414 and 1.120690 for the outputs, and 7.142857 and 0.00 for the input.
+```{r}
+dmu2 <- read.lp("dmu2.lp")
+dmu2
+solve(dmu2)
+get.objective(dmu2)
+get.variables(dmu2)
+```
+The solution indicates that the objective value is 1, which indicates that we are able to achieve maximum efficiency for DMU(2).This happens when we use the weights 1.299694 and 6.858890 for the outputs, and 0 and 4.761905 for the input.
+```{r}
+dmu3 <- read.lp("dmu3.lp")
+dmu3
+solve(dmu3)
+get.objective(dmu3)
+get.variables(dmu3)
+```
+The solution indicates that the objective value is 1, which indicates that we are able to achieve maximum efficiency for DMU(1).This happens when we use the weights 1.724138 and 3.735632 for the outputs, and 2.380952 and 0.00 for the input.
+
+```{r}
+dmu4 <- read.lp("dmu4.lp")
+dmu4
+solve(dmu4)
+get.objective(dmu4)
+get.variables(dmu4)
+```
+The solution indicates that the objective value is 0.9836182, which indicates that we are unable to achieve maximum efficiency for DMU(4). The maximum efficiency of 0.98 is achieved when we use the weights 1.923077 and 0.00 for the outputs, and 1.055657 and 1.638177 for the input. In other words, even if we provide the greatest weight to deposits, DMU(4) is the not efficient.
+```{r}
+dmu5 <- read.lp("dmu5.lp")
+dmu5
+solve(dmu5)
+get.objective(dmu5)
+get.variables(dmu5)
+```
+The solution indicates that the objective value is 0.961371, which indicates that we are unable to achieve maximum efficiency for DMU(5). The maximum efficiency of 0.96 is achieved when we use the weights 1.033058 and 5.320248 for the outputs, and 1.117916 and 2.995868 for the input. In other words, even if we provide the greatest weight to deposits, DMU(5) is the not efficient.
+```{r}
+dmu6 <- read.lp("dmu6.lp")
+dmu6
+solve(dmu6)
+get.objective(dmu6)
+get.variables(dmu6)
+```
+The solution indicates that the objective value is 0.8618663, which indicates that we are unable to achieve maximum efficiency for DMU(6). The maximum efficiency of 0.86 is achieved when we use the weights 1.469508 and 7.567965 for the outputs, and 1.590217 and 4.261572 for the input. In other words, even if we provide the greatest weight to deposits, DMU(6) is the not efficient.
+```{r}
+library(Benchmarking)
+x <- matrix(c(150,400,320,520,350,320,0.2,0.7,1.2,2.0,1.2,0.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000),ncol = 2)
+colnames(y) <- c("Reimnursed patient days","Privately paid patient days")
+colnames(x) <- c("Staff hours per day","Supplies per day")
+rownames(x) <- paste0(rep("facility",6),seq(1,6,1))
+rownames(y) <- paste0(rep("facility",6),seq(1,6,1))
+x
+y
+```
+
+```{r}
+r1 <- dea(x,y,RTS = "crs")            # provide the input and output 
+r1
+#f$eff[6]
+```
+
+The results indicate that DMUs 1, 2, 3 and 4 are efficient. DMU(5) is only 0.9775 efficient, and DMU(6) is 0.8675 efficient. 
+```{r}
+peers(r1)                             # identify the peers
+lambda(r1)                            # identify the relative weights given to the peers
+r1$lambda
+#dea.plot.isoquant(x,y,RTS="crs")
+```
+
+
+```{r}
+r2 <- dea(x,y,RTS = "fdh")            # provide the input and output 
+r2
+peers(r2)                             # identify the peers
+lambda(r2)                            # identify the relative weights given to the peers
+#dea.plot.isoquant(x,y,RTS="fdh")
+```
+
+```{r}
+r3 <- dea(x,y,RTS = "vrs")            # provide the input and output 
+r3
+peers(r3)                             # identify the peers
+lambda(r3)                            # identify the relative weights given to the peers
+#dea.plot.isoquant(x,y,RTS="vrs")
+```
+
+```{r}
+r4 <- dea(x,y,RTS = "irs")            # provide the input and output 
+r4
+peers(r4)                             # identify the peers
+lambda(r4)                            # identify the relative weights given to the peers
+#dea.plot.isoquant(x,y,RTS="irs")
+```
+
+```{r}
+r5 <- dea(x,y,RTS = "drs")            # provide the input and output 
+r5
+peers(r5)                             # identify the peers
+lambda(r5)                            # identify the relative weights given to the peers
+#dea.plot.isoquant(x,y,RTS="drs")
+```
+
+```{r}
+r6 <- dea(x,y,RTS = "fdh+")            # provide the input and output 
+r6
+peers(r6)                             # identify the peers
+lambda(r6)                            # identify the relative weights given to the peers
+#dea.plot.isoquant(x,y,RTS="fdh+")
+```
+
+Q3)	Summarize your results in a tabular format
+```{r}
+result <- cbind(round(r1$eff,4),round(r1$lambda,4))
+colnames(result) <- c("efficiency",rownames(result))
+result
+```
+From above result it is clear that nursing homes 1,2,3,4 are efficient and only 5,6 are not efficient.
+Efficiency can be achieved by using shadow prices(lambda values from above table)
+
+Q4)	Compare and contrast the above results
+```{r}
+C <- cbind(r1$eff, r2$eff,r3$eff, r4$eff,r5$eff, r6$eff)
+C
+```
+
+Efficiency of each unit is tabulated.
